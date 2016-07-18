@@ -103,3 +103,10 @@ body{
 .insideCard{
   padding:20px;
 }
+
+/*vedor card css*/
+.vendorCardCard{
+  margin:auto;
+  width: 96%;
+  padding:20px;
+}
