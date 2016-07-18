@@ -1,0 +1,105 @@
+body{
+	width: 100%;
+	margin: 0px;
+}
+.tabAdminCard{
+	width: 90%;
+	margin:auto;
+}
+.assignedVendorForm{
+	background-color:white;
+	width: 90%;
+	margin: auto;
+	padding: 20px;
+}
+
+/*impressions page css*/
+.header{
+    margin:0px;
+    width: 100%;
+    background-color:lightgrey;
+}
+
+.impCreditForm{
+	width:96%;
+	margin:50px auto auto auto;
+	padding:20px;
+
+}
+.creditDetailsSelector{
+	width:100%;
+	border-top: 0px;
+	border-left: 0px;
+	border-right: 0px;
+	background-color:white;
+	height:30px;
+}
+
+.fullWidthButton{
+	width: 100%;
+}
+
+.companyImpDebForm{
+	width:96%;
+	margin:50px auto auto auto;
+	padding:20px;
+}
+.debitDetailsSelector{
+	width:100%;
+	border-top: 0px;
+	border-left: 0px;
+	border-right: 0px;
+	background-color:white;
+	height:30px;
+}
+
+.fullWidthButton{
+	width: 100%;
+}
+.impDebtSubmitButton{
+	margin-top:20px;
+}
+
+
+
+/*company registration css*/
+.companyRegistration{
+	width: 90%;
+	padding: 20px;
+	margin: auto;
+}
+
+
+/*company content provider css*/
+.companyContentCard{
+	width: 90%;
+	margin: auto;
+	padding:20px;
+}
+.companySelector{
+	width: 100%;
+	border-top: 0px;
+	border-left: 0px;
+	border-right: 0px;
+	background-color:white;
+}
+
+
+/*company details cards*/
+.cardFormCard{
+  width:94%;
+  margin:50px auto auto auto;
+  padding:20px;
+}
+
+.formSelector{
+  width: 100%;
+  border-left: 0px;
+  border-right: 0px;
+  border-top: 0px;
+  background-color:white;
+  min-height:35px;
+}
+.insideCard{
+  padding:20px;
+}

@@ -1,0 +1,97 @@
+ <md-toolbar md-scroll-shrink>
+        <div class="md-toolbar-tools">Company Transaction Details</div>
+    </md-toolbar>
+
+    <md-card class="cardFormCard" layout="row" layout-xs="column">
+        <md-card flex class="insideCard">
+
+            <form class="companyDetails">
+                <h1 class="md-title" layout-align="center">Select City</h1>
+                <select class="formSelector"  ng-model="cityId">
+                    <option  ng-repeat="city in cities track by $index" ng-value="city.cityId">
+                      {{city.cityName}}
+                    </option>
+                </select>
+                <h1 class="md-title" layout-align="center">Select Company</h1>
+                <select class="formSelector" ng-model="companyId" ng-disabled="!cityId ">
+                    <option  ng-repeat="company in allCompany" value="{{company.companyId}}">
+                        {{company.companyName}}
+                    </option>
+                </select>
+            </form>
+        </md-card>
+        <md-card flex>
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">Details</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content>   
+                <md-input-container>              
+                    <md-button 
+                        ng-disabled="!companyId "
+                        class="md-raised md-primary"
+                        ng-click="creditDetails(companyId)">
+                        Credit Details
+                    </md-button>
+                </md-input-container> <br>  
+                Total Credits:{{sumCredit}} <br>
+                <md-input-container>   
+                    <md-button 
+                        ng-disabled="!companyId"
+                        class="md-raised md-primary"
+                        ng-click="debitDetails(companyId)">
+                        Debit Details
+                    </md-button>       
+                </md-input-container> <br>        
+                Total Debit:{{sumDebit}} <br>
+                <md-input-container>                  
+                    <br> Total Used:{{sumUsed}}
+                </md-input-container>
+            </md-card-content>
+        </md-card>
+    </md-card>
+    <md-card class="cardFormCard">
+         <md-list flex>
+            <md-button 
+                ng-disabled="!companyId"
+                class="md-raised md-primary"
+                ng-click="VendorInfo(companyId,cityId)">
+                Vendor Details
+            </md-button>       
+            <md-list-item class="md-3-line" style="width:550px" ng-repeat="vendor in vendorobj  track by $index">
+                <div class="md-list-item-text" layout="column">
+                    <h4>Vendor Name: {{vendor.vendorname}}</h4>
+                    <h4>Impression Used:{{vendor.used}}</h4>
+                    <h4>Impression Assigned : {{vendor.assigned}}</h4>
+                </div>
+                <md-divider></md-divider>
+            </md-list-item>
+            <md-divider></md-divider>
+            <md-subheader></md-subheader>
+        </md-list>
+
+    </md-card>
+
+    <md-card class="cardFormCard">
+         <md-list flex>
+            <md-button 
+                ng-disabled="!companyId"
+                class="md-raised md-primary"
+                ng-click="dateInfo(companyId,cityId)">
+                Date Details
+            </md-button>     
+            <md-list-item class="md-3-line" style="width:550px" ng-repeat="datevalue in dateobj  track by $index">
+                <div class="md-list-item-text" layout="column">
+                    <h4>Assign Date:{{datevalue.date}}</h4>
+                    <h4>Vendor Name:{{datevalue.vendorname}}</h4>
+                    <h4>Impression Used:{{datevalue.used}}</h4>
+                    <h4>Impression Assigned :{{datevalue.assigned}}</h4>
+                </div>
+                <md-divider></md-divider>
+            </md-list-item>
+            <md-divider></md-divider>
+            <md-subheader></md-subheader>
+
+        </md-list>
+    </md-card>

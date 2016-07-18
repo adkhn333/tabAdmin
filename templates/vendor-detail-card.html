@@ -1,0 +1,57 @@
+<div>
+         <md-content class="md-padding" layout-xs="column"  layout="row">
+          <div flex-xs layout="column">
+            <md-card>
+            <form >
+              <h1 class="md-title" layout-align="center">Vendor Transaction Details</h1>
+
+                <div layout="row">
+                  <md-select placeholder="Select City" 
+                    ng-model="cityId" >
+                      <md-option ng-click="setCityId(city.cityId)" ng-value="city.cityId"
+                        ng-repeat="city in cities track by $index">
+                        {{city.cityName}}
+                      </md-option>
+                  </md-select>
+                  <md-select placeholder="Select Vendor" 
+                    ng-model="vendorId" 
+                    ng-change="getTabId(vendorId)">
+                      <md-option ng-value="vendor.vendorId" 
+                        ng-repeat="vendor in allVendors track by $index">
+                        {{vendor.vendorName}}
+                      </md-option>
+                  </md-select>
+                    <md-select ng-model="tabId">
+                      <md-option  ng-repeat="tab in tabNames" value="{{tab.tabId}}">{{tab.name}}</md-option>
+                    </md-select>
+                  </md-input-container>
+                   <md-button ng-click="showImpressionDetails(vendorId,tabId)">Get Details</md-button>
+                   <md-button ng-click="showAllDetails(vendorId)">Get All Details</md-button>
+              </form>
+          </div>
+
+          <div flex-xs  layout="column" >
+            <h4>Total Impression Assigned : {{tabImpressionAssigned}}</h4>
+            <h4>Total Impression Used : {{tabImpressionUsed}}</h4>
+              <md-card md-scroll-y >
+                  <md-list flex >
+                      <md-list-item class="md-3-line" ng-repeat="comp in company track by $index">             
+                          <div  class="md-list-item-text" layout="column" >
+                              <h4>{{comp.Tab}}</h4>
+                              <h4>Company Names : {{comp.companyName}}</h4>
+                              <h4>Total Company Impression Assigned :{{comp.impressionAssigned}} </h4>
+                              <h4>Total Company Impression Used : {{comp.impressionUsed}} </h4>
+                              <h4>Total Company Impression left : {{comp.impBalance}} </h4>
+                              <h4>Assign Date : {{comp.assignDate}} </h4>
+                              <h4>Status : {{comp.status}} </h4>
+                          </div>        
+                          <md-divider></md-divider>
+                          </md-list-item>
+                          <md-divider></md-divider>
+                          <md-subheader></md-subheader>
+                  </md-list>
+              </md-card>
+          </div>
+        </md-content>
+      </div> 
+    </div>

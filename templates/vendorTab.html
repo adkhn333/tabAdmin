@@ -1,0 +1,40 @@
+<md-card class="assignedVendorForm"
+  <div class="header">
+    <h1 style="font-size:250%">Assign Vendor Tab</h1>
+  </div>
+  <form class="">
+    <md-select 
+      placeholder="Select City" 
+      ng-model="cityId" >
+        <md-option 
+          ng-click="setCityId(city.cityId)" 
+          ng-value="city.cityId"
+          ng-repeat="city in cities track by $index">
+          {{city.cityName}}
+        </md-option>
+    </md-select>
+    <md-select 
+      placeholder="Select Vendor" 
+      ng-model="vendorId" 
+      ng-change="genrateCode()">
+        <md-option 
+          ng-value="vendor.vendorId" 
+          ng-repeat="vendor in allVendors track by $index">
+          {{vendor.vendorName}}
+        </md-option>
+    </md-select>
+    <md-input-container class="md-block">
+      <label>ENTER CODE</label>
+      <input type="text" required 
+        md-no-asterisk 
+        ng-model="code"
+        name="enterCode">
+    </md-input-container>
+    <md-button 
+      ng-click="updateTabList(code,vendorId)" 
+      type="submit"
+      class="md-raised md-primary" >
+      Activate
+    </button> 
+  </form>
+</md-card>
