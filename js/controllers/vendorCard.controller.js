@@ -91,8 +91,7 @@ adminApp.controller('vendorCardCtrl' , ['$scope','$timeout', function($scope,$ti
         angular.forEach($scope.campaigns, function(data){
           var currentCompanyId = data.companyId;
           var currentDebitId = data.debitId;
-          var temp= $scope.impressionDebitted[currentCompanyId][currentDebitId].impressionAssigned;
-          // temp = temp[currentDebitId].impressionAssigned;
+          var temp = $scope.impressionDebitted[currentCompanyId][currentDebitId].impressionAssigned;
           var tempUsed = $scope.impressionDebitted[currentCompanyId][currentDebitId].impressionUsed;
           // tempUsed = tempUsed[currentDebitId].impressionUsed;
           $timeout(function(){
@@ -100,36 +99,44 @@ adminApp.controller('vendorCardCtrl' , ['$scope','$timeout', function($scope,$ti
             $scope.tabImpressionUsed += tempUsed; 
           },100);
         })
-         firebase.database().ref('/marketing/company/registration/').once("value",function(snapshot){
-             $scope.companyDetails = snapshot.val();
-             console.log($scope.companyDetails);
-         }).then(function(){
-             angular.forEach($scope.campaigns, function(data){
-        var details={
-      Tab : '',
-      companyName : '',
-      impressionUsed: 0,
-      impressionAssigned: 0,
-      impBalance: 0,
-      assignDate:'',
-      status:''
-    } 
-          var currentCompanyId = data.companyId;
-          var currentDebitId = data.debitId;
-          console.log($scope.companyDetails[currentCompanyId].companyName);
-          details.companyName= $scope.companyDetails[currentCompanyId].companyName;
+        firebase.database().ref('/marketing/company/registration/').once("value",function(snapshot){
+           $scope.companyDetails = snapshot.val();
+           console.log($scope.companyDetails);
+        }).then(function(){
+            angular.forEach($scope.campaigns, function(data){
+              var details={
+                Tab : '',
+                companyName : '',
+                impressionUsed: 0,
+                impressionAssigned: 0,
+                impBalance: 0,
+                assignDate:'',
+                status:''
+              } 
+              angular.forEach($scope.tabNames,function(data){
+                console.log(data);
+                if(tabId==data.tabId){
+                  console.log(tabId);
+                  details.Tab=data.name;
+                }
+              });
 
-          details.impressionUsed = $scope.impressionDebitted[currentCompanyId][currentDebitId].impressionUsed;
-          details.impressionAssigned = $scope.impressionDebitted[currentCompanyId][currentDebitId].impressionAssigned;
-          details.impBalance = details.impressionAssigned - details.impressionUsed;
-          details.assignDate= $scope.impressionDebitted[currentCompanyId][currentDebitId].assignDate;
-          details.status= $scope.impressionDebitted[currentCompanyId][currentDebitId].status;
+              var currentCompanyId = data.companyId;
+              var currentDebitId = data.debitId;
+              console.log($scope.companyDetails[currentCompanyId].companyName);
+              details.companyName= $scope.companyDetails[currentCompanyId].companyName;
 
-          $timeout(function(){
-            $scope.company.push(details);         
-          },100);
+              details.impressionUsed = $scope.impressionDebitted[currentCompanyId][currentDebitId].impressionUsed;
+              details.impressionAssigned = $scope.impressionDebitted[currentCompanyId][currentDebitId].impressionAssigned;
+              details.impBalance = details.impressionAssigned - details.impressionUsed;
+              details.assignDate= $scope.impressionDebitted[currentCompanyId][currentDebitId].assignDate;
+              details.status= $scope.impressionDebitted[currentCompanyId][currentDebitId].status;
+
+              $timeout(function(){
+                $scope.company.push(details);         
+              },100);
+          })
         })
-         })
       });
      })
   };
