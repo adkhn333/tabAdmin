@@ -23,6 +23,8 @@ adminApp.controller('companyContentCtrl' , ['$scope','$timeout','$http','$mdToas
     },50);
   });
  
+
+  CKEDITOR.replace( 'editor' );
  //this function retrieve file details
   $scope.getFileDetails = function (e) {
     $scope.files = [];

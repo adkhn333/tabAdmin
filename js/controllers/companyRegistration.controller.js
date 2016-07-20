@@ -18,27 +18,38 @@ if($scope.mobileno<10 || $scope.mobileno>10 ){
   $scope.hidd=false;  
 }
 // enter company details in firebase database for for company registration
-$scope.companyRegistration = function(companyName,cityName,address,mobileNo,email){
-    
-    var newCompKey = firebase.database().ref('/marketing/company/registration/').push().key;
-    var postData = {
-    companyId : newCompKey,	
-    companyName : companyName,
-    cityName : cityName,
-    address : address,
-    mobileNo : mobileNo,
-    email : email,
-    activationDate : activationDate
-  };
+  $scope.companyRegistration = function(companyName,cityName,address,mobileNo,email){
+    if(mobileNo.length==10 && companyName!='' && address!='' && email !=''){
+      
+      var newCompKey = firebase.database().ref('/marketing/company/registration/').push().key;
+      var postData = {
+        companyId : newCompKey,	
+        companyName : companyName,
+        cityName : cityName,
+        address : address,
+        mobileNo : mobileNo,
+        email : email,
+        activationDate : activationDate
+      };
       var updates = {};
       updates['/marketing/company/registration/' + newCompKey] = postData;
-      firebase.database().ref().update(updates);
+      // firebase.database().ref().update(updates);
       var toast = $mdToast.simple()
           .textContent('Data Updated Successfully')
           .highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
           .position("bottom");
         $mdToast.show(toast)
       console.log('company registered');
+      // $scope.companyRegistrationForm.$setPristine();
+      // $scope.companyRegistrationForm.$setUntouched();
+      $scope.companyName="";
+      $scope.mobileNo="";
+      $scope.cityName="";
+      $scope.email="";
+      $scope.address="";
+
+
     };	
+  }
 }]);
 
