@@ -22,7 +22,6 @@ adminApp.controller('companyContentCtrl' , ['$scope','$timeout','$http','$mdToas
        console.log($scope.allCompany);  
     },50);
   });
- 
 
   CKEDITOR.replace( 'editor' );
  //this function retrieve file details
@@ -97,11 +96,12 @@ adminApp.controller('companyContentCtrl' , ['$scope','$timeout','$http','$mdToas
           .highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
           .position("bottom");
         $mdToast.show(toast);
+         $scope.dataVal={};
+        CKEDITOR.instances.editor.setData("");
+        $scope.message="";
       }
     }  
     //thes are set to null so that same data will not be displayed after one successful image submission
-      $scope.companyId='';
-      $scope.title='';
-      $scope.description='';
+
   } 
 }]);

@@ -6,7 +6,7 @@
   </md-toolbar>
   <form name="compImpCreditForm">
     <md-select placeholder="Select Company Name" 
-      ng-model="companyId"
+      ng-model="dataVal.companyId"
       md-on-open="getTabId(vendorId)">
       <md-option ng-value="company.companyId" 
         ng-repeat="company in allCompany">
@@ -16,18 +16,18 @@
 
     <md-input-container class="md-block">
       <label>Impression Credited</label>
-      <input type="number"  ng-model="data.impressionCredited">
+      <input type="number"  ng-model="dataVal.impressionCredited">
     </md-input-container> 
 
     <div>
-        <md-datepicker ng-model="data.validityDate" 
+        <md-datepicker ng-model="dataVal.validityDate" 
             md-placeholder="Choose Validity">
         </md-datepicker>
     </div>
 
     <md-button class="md-raised md-primary fullWidthButton" 
         type="submit" 
-        ng-click="submitCredit(data,companyId)">
+        ng-click="submitCredit(dataVal,dataVal.companyId)">
         Submit
     </md-button>
   </form>
@@ -41,65 +41,72 @@
   </div>
   </md-toolbar>
   <form name="debitForm">
-    <md-select placeholder="Select Vendor" 
-      ng-model="vendorId" 
-      md-on-open="getTabId(vendorId)">
-        <md-option ng-value="vendor.vendorId" 
-          ng-repeat="vendor in allVendors track by $index">
-          {{vendor.vendorName}}
-        </md-option>
-    </md-select>
+        <md-select placeholder="Select City" 
+            ng-model="dataVal.cityId" >
+              <md-option ng-click="setCityId(city.cityId)" ng-value="city.cityId"
+                ng-repeat="city in cities track by $index">
+                {{city.cityName}}
+              </md-option>
+          </md-select>
+          <md-select placeholder="Select Vendor" 
+            ng-model="dataVal.vendorId" 
+            md-on-open="getTabId(dataVal.vendorId)">
+              <md-option ng-value="vendor.vendorId" 
+                ng-repeat="vendor in allVendors track by $index">
+                {{vendor.vendorName}}
+              </md-option>
+          </md-select>
 
-    <md-select placeholder="Select Vendor Tab" 
-      ng-model="TabId"
-      md-on-open="getTabId(vendorId)">
-        <md-option ng-value="tab.TabId" 
-          ng-repeat="tab in allVendorsTabs track by $index">
-          {{tab.TabId}}
-        </md-option>
-    </md-select>
+          <md-select placeholder="Select Vendor Tab" 
+            ng-model="dataVal.tabId"
+            md-on-open="getTabId(dataVal.vendorId)">
+              <md-option  
+                ng-repeat="tab in allVendorsTabs track by $index">
+                {{tab.tabId}}
+              </md-option>
+          </md-select>
 
-    <md-select placeholder="Select Company" 
-      ng-model="companyId"
-      md-on-open="getTabId(vendorId)">
-        <md-option ng-value="company.companyId" 
-          ng-repeat="company in allCompanies track by $index">
-          {{company.companyName}}
-        </md-option>
-    </md-select>
+          <md-select placeholder="Select Company" 
+            ng-model="dataVal.companyId"
+            md-on-open="getTabId(dataVal.vendorId)">
+              <md-option ng-value="company.companyId" 
+                ng-repeat="company in allCompanies track by $index">
+                {{company.companyName}}
+              </md-option>
+          </md-select>
 
-    <md-input-container class="md-block">
-      <label>Impression Assigned</label>
-      <input type="number"  required md-no-asterisk name="description" ng-model="impressionAssigned">
-      <p class="error validationerror"
-    ng-show="myform.email.$invalid && myform.email.$touched">
-    Add Some Value
-    </p>
-    </md-input-container>          
+          <md-input-container class="md-block">
+            <label>Impression Assigned</label>
+            <input type="number"  required md-no-asterisk name="description" ng-model="dataVal.impressionAssigned">
+            <p class="error validationerror"
+          ng-show="myform.email.$invalid && myform.email.$touched">
+          Add Some Value
+          </p>
+          </md-input-container>          
 
-    <div>
-      <md-datepicker ng-model="startDate" md-placeholder="Start Date"></md-datepicker>
-      <p class="error validationerror"
-      ng-show="myform.email.$invalid && myform.email.$touched">
-      Select a Date
-    </p>
-  </div>
-    <div>
-      <md-datepicker ng-model="endDate" md-placeholder="End Date"></md-datepicker>
-      <p class="error validationerror"
-      ng-show="myform.email.$invalid && myform.email.$touched">
-      Select a Date
-    </p>
-  </div>
+          <div>
+            <md-datepicker ng-model="startDate" md-placeholder="Start Date"></md-datepicker>
+            <p class="error validationerror"
+            ng-show="myform.email.$invalid && myform.email.$touched">
+            Select a Date
+          </p>
+        </div>
+          <div>
+            <md-datepicker ng-model="endDate" md-placeholder="End Date"></md-datepicker>
+            <p class="error validationerror"
+            ng-show="myform.email.$invalid && myform.email.$touched">
+            Select a Date
+          </p>
+        </div>
 
-    <div align="center" class="impDebtSubmitButton">
-      <md-button class="md-raised md-primary fullWidthButton"
-        type="submit"
-        ng-click="impressionAssign(vendorId,TabId,companyId,impressionAssigned,startDate,endDate)">
-        Add Impression to Company
-      </md-button>
-    </div>
-  </form>
+        <div align="center" class="impDebtSubmitButton">
+          <md-button class="md-raised md-primary fullWidthButton"
+            type="submit"
+            ng-click="impressionAssign(dataVal.vendorId,dataVal.tabId,dataVal.companyId,dataVal.impressionAssigned,startDate,endDate)">
+            Add Impression to Company
+          </md-button>
+        </div>
+          </form>
 </md-card>
 
 

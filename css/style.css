@@ -110,3 +110,10 @@ body{
   width: 96%;
   padding:20px;
 }
+
+/*get codes css*/
+.vendorCodeDetailsForm{
+  width: 96%;
+  margin: auto;
+  padding:20px;
+}

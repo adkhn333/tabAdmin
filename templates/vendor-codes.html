@@ -1,0 +1,23 @@
+
+<md-card class="vendorCodeDetailsForm">
+  <select ng-model="cityId" class="formSelector">
+      <option  ng-value="city.cityId"
+        ng-repeat="city in cities track by $index">
+        {{city.cityName}}
+      </option>
+  </select>
+  <md-button  
+    class="md-raised md-primary fullWidthButton" 
+    ng-click="getVendorDetails(cityId)">
+    Get Details
+  </md-button>
+</md-card>
+<md-card class="vendorCodeDetailsForm">
+  <h3 layout="row"><span flex>Sr No</span><span flex>Vendor Name</span><span flex>Code</span></h3>
+  <md-list>
+    <md-list-item ng-repeat="vendor in allVendors track by $index" layout="row">
+        <h4 flex=33>{{$index+1}} )</h4>
+        <h4 flex=33>{{vendor.vendorName}} </h4>
+        <h4 flex=33> {{vendor.code}}</h4> 
+  </md-list>
+</md-card>

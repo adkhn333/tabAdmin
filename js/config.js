@@ -4,7 +4,7 @@ adminApp.config(function($stateProvider, $urlRouterProvider) {
     .state('/', {
       url: "/",
       templateUrl: "templates/vendorTab.html",
-      controller:'assignedVendorTabCtrl'
+      controller:'vendorTabCtrl'
     })
     .state('impressions', {
       url: "/impressions",
@@ -35,5 +35,10 @@ adminApp.config(function($stateProvider, $urlRouterProvider) {
       url: "/pending-company",
       templateUrl: "templates/pending-company.html",
       controller:'updatePendingAppCtrl'
+    })
+    .state('get-codes', {
+      url: "/get-codes",
+      templateUrl: "templates/vendor-codes.html",
+      controller:'vendorCodesCtrl'
     });
 });

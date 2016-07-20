@@ -32,12 +32,23 @@ adminApp.controller('impressionCtrl' , ['$scope', '$timeout','$mdToast',
       .position("bottom");
     $mdToast.show(toast);
     console.log("Updated");
+    $scope.dataVal={};
   };
 
 
     //impressions debited js
 
-   //retrieve every company's data 
+   //return all city name and city id 
+  $scope.cities = [];
+  firebase.database().ref('city').once('value', function(snapshot){
+    angular.forEach(snapshot.val(),function(value){
+      $timeout(function(){
+        $scope.cities.push(value);
+        console.log($scope.cities);
+      },100)
+    });
+  })
+ //retrieve every company's data 
   $scope.allCompanies = [];
     firebase.database().ref('/marketing/company/registration/').on('value', function(snapshot){
     angular.forEach(snapshot.val(),function(value){
@@ -46,147 +57,179 @@ adminApp.controller('impressionCtrl' , ['$scope', '$timeout','$mdToast',
     $timeout(function(){
       console.log($scope.allCompanies);
     },0)
-  });
-
-  // retrieve every vendor's name and id
+  })
+    //use cityId for getting vendors list
   $scope.allVendors = [];
-  firebase.database().ref('vendor').on('value', function(snapshot){
+  $scope.setCityId = function(cityId){
+   // $scope.cityId = cityId;
+    console.log(cityId);
+    // retrieve every vendor's name and id
+    firebase.database().ref('vendor/'+cityId).once('value', function(snapshot){
+    console.log(snapshot.val());
     angular.forEach(snapshot.val(),function(value){
-      $scope.allVendors.push(value);
+       var vendorObj = {
+        vendorId : value.vendorId,
+        vendorName : value.vendorName,
+      }
+      $scope.allVendors.push(vendorObj);
+      console.log($scope.allVendors);
+    })  
+  })
+  }
+  
+
+//get all tab's Id that are assigned to a partular vendor
+$scope.getTabId = function(vendorId){
+  console.log('new');
+  console.log(vendorId);
+  $scope.allVendorsTabs = [];
+  var vendorKey = vendorId;
+  console.log(vendorKey);
+  firebase.database().ref('/vendorTab/'+ vendorKey).on('value', function(snapshot){
+    angular.forEach(snapshot.val(),function(value){
+      console.log(snapshot);
+      $scope.allVendorsTabs.push(value);
     });
     $timeout(function(){
-      console.log($scope.allVendors);
+      console.log($scope.allVendorsTabs);
     },100)
-  });
-
-  //get all tab's Id that are assigned to a partular vendor
-  $scope.getTabId = function(vendorId){
-    console.log(vendorId);
-    $scope.allVendorsTabs = [];
-    var vendorKey = vendorId;
-    console.log(vendorKey);
-    console.log("hii");
-    firebase.database().ref('/vendorTab/'+ vendorKey).on('value', function(snapshot){
-      angular.forEach(snapshot.val(),function(value){
-        console.log(snapshot);
-        $scope.allVendorsTabs.push(value);
-      });
-      $timeout(function(){
-        console.log($scope.allVendorsTabs);
-      },100)
-    });
-  };
-  //assign impression details for particular company, vendor and tab 
-  $scope.impressionAssign = function(vendorId,TabId,companyId,impressionAssigned,startDate,endDate){
-    firebase.database().ref('/impressionCredits/' + companyId).orderByChild("compId").equalTo(companyId).on('child_added',function(snapshot){
-      var creditId = snapshot.val().impressionCreditId;
-      var impressionCredited = snapshot.val().impressionCredited;
-      var validityDate = snapshot.val().validityDate;
-      var assignDate = Math.round(new Date().getTime()/1000);
-      var presentDate = Math.round(new Date().getTime()/1000);
-      var roundedStartDate = Math.round(new Date(startDate).getTime()/1000);
-      var roundedEndDate = Math.round(new Date(endDate).getTime()/1000);
-      var status;  
-      if(presentDate < roundedStartDate){
-        status = 'pending';
-      } else if((presentDate > roundedStartDate ||presentDate == roundedStartDate ) && presentDate < roundedEndDate){
-        status = 'running';
-      } else if(presentDate >roundedEndDate || presentDate == roundedEndDate){
-        status = 'completed';
-      } else {
-        status = 'cancelled';
-      }
-
-      firebase.database().ref().child('/impressionDebbited/'+ companyId).once('value', function(s){
-        console.log("enter1");
-        if( s.val() != null ){
-          firebase.database().ref('/impressionDebbited/'+ companyId).orderByChild("TabId").equalTo(TabId).on('child_added',function(snapshot){
-           console.log('hiii n hello');
-           $scope.companyImpressionAssigned=0;
-           snapshot.forEach(function(data){
-              var companyImpressionAssigned = data.val().impressionAssigned;
-              $scope.companyImpressionAssigned+=companyImpressionAssigned;
-            })
-           $scope.companyImpressionAssigned+=impressionAssigned;
-          })
-        }else{
-          console.log("hello else");
-          $scope.companyImpressionAssigned=impressionAssigned; 
-          console.log( $scope.companyImpressionAssigned);    
-        }
-        $scope.addImpression(creditId,vendorId,TabId,companyId,impressionAssigned,impressionCredited,assignDate,roundedStartDate,roundedEndDate,status,$scope.companyImpressionAssigned,validityDate);
-      })
-    })
+  })
+}
+$scope.startDate= new Date();
+$scope.endDate= new Date();
+//assign impression details for particular company, vendor and tab 
+$scope.impressionAssign = function(vendorId,tabId,companyId,impressionAssigned,startDate,endDate){
+  firebase.database().ref('/impressionCredits/' + companyId).orderByChild("companyId").equalTo(companyId).on('child_added',function(snapshot){
+  var creditId = snapshot.val().impressionCreditId;
+  var impressionCredited = snapshot.val().impressionCredited;
+  var validityDate = snapshot.val().validityDate;
+  var assignDate = new Date().getTime();
+  var newStartDate = new Date(startDate).getTime();
+  var newEndDate = new Date(endDate).getTime();
+  var presentDate = Math.round(new Date().getTime()/1000);
+  //use rounded dates to compare differnet days and time
+  var roundedStartDate = Math.round(new Date(newStartDate).getTime()/1000);
+  var roundedEndDate = Math.round(new Date(newEndDate).getTime()/1000);
+  //set the status for impression(i.e. the images that will be shown in vendor tab),if status is pending than image/impression will be shown later when its start date arrives,
+  //if status is running the image will be shown and if status is completed the image will not be shown for that particular impressionID  
+  var status;  
+  if(presentDate < roundedStartDate){
+    status = 'pending';
+  } else if((presentDate > roundedStartDate ||presentDate == roundedStartDate ) && presentDate < roundedEndDate){
+    status = 'running';
+  } else if(presentDate >roundedEndDate || presentDate == roundedEndDate){
+    status = 'completed';
+  } else {
+    status = 'cancelled';
   }
-  // update impression details that are assigned in above function, in a database object
-  $scope.addImpression = function(creditId,vendorId,TabId,companyId,impressionAssigned,impressionCredited,roundedStartDate,assignDate,roundedEndDate,status,companyImpressionAssigned,validityDate){
-    if ((impressionCredited > companyImpressionAssigned)&&(assignDate < validityDate) ) {
-      console.log( companyImpressionAssigned);
-      var impressionUsed = 0;
-      impressionAssignId = firebase.database().ref('/impressionDebitted').push().key;
-      //console.log(impressionAssignId,vendorId,TabId,creditId,companyId,impressionAssigned,assignDate,roundedStartDate,roundedEndDate,impressionUsed,status);
-      var postData = {
-        impressionAssignId : impressionAssignId,
-        vendorId : vendorId,
-        TabId : TabId,
-        creditId : creditId,
-        companyId : companyId, 
-        impressionAssigned : impressionAssigned,
-        assignDate : assignDate,
-        startDate : roundedStartDate,
-        endDate : roundedEndDate,
-        impressionUsed : impressionUsed,
-        status : status
-      };
+//checks if impressionDebbited/companyId object exists or not
+firebase.database().ref().child('/impressionDebbited/'+ companyId).once('value', function(s){
+  if( s.val() != null ) 
+  {
+    firebase.database().ref('/impressionDebbited/'+ companyId).orderByChild("tabId").equalTo(tabId).on('child_added',function(snapshot){
+     $scope.companyImpressionAssigned=0;
+     snapshot.forEach(function(data){
+        var companyImpressionAssigned = data.val().impressionAssigned;
+        $scope.companyImpressionAssigned+=companyImpressionAssigned;
+      })
+     $scope.companyImpressionAssigned+=impressionAssigned;
+    })
+  }else{
+    $scope.companyImpressionAssigned=impressionAssigned; 
+  }
+  $scope.addImpression(creditId,vendorId,tabId,companyId,impressionAssigned,impressionCredited,assignDate,newStartDate,newEndDate,status,$scope.companyImpressionAssigned,validityDate);
+})
+ })
+}
+// update impression details that are assigned in above function, in a database object
+$scope.addImpression = function(creditId,vendorId,tabId,companyId,impressionAssigned,impressionCredited,assignDate,newStartDate,newEndDate,status,companyImpressionAssigned,validityDate){
+  if ((impressionCredited > companyImpressionAssigned) ) {
+    var impressionUsed = 0;
+    impressionAssignId = firebase.database().ref('/impressionDebitted').push().key;
+    var postData = {
+      impressionAssignId : impressionAssignId,
+      vendorId : vendorId,
+      tabId : tabId,
+      creditId : creditId,
+      companyId : companyId, 
+      impressionAssigned : impressionAssigned,
+      assignDate : assignDate,
+      startDate : newStartDate,
+      endDate : newEndDate,
+      impressionUsed : impressionUsed,
+      status : status
+    };
       var updates = {};
       updates['/impressionDebitted/' + companyId + '/' + impressionAssignId] = postData;
       firebase.database().ref().update(updates);
       $timeout(function(){
         $scope.updateCampaign(impressionAssignId);
       },100)
-    } else{
-      console.log('limit exceeded');
-      $scope.message = "Either impressions credit limits exhausted or validity date expired";
-    }
+  } else{
+    console.log('limit exceeded');
+    $scope.message = "Either impressions credit limits exhausted or validity date expired";
   }
+}
 
   // assign company Id and impressionAssignId as debitId in current key of tabCampaign object 
   $scope.updateCampaign = function(impressionAssignId){
-    console.log(impressionAssignId);
+  firebase.database().ref('impressionDebitted').on('child_added',function(snapshot){
+          //searching for particular tabId 
+      snapshot.forEach(function(data) {
+      console.log(data.val().status);
+      if((data.val().status == "running") && (data.val().impressionAssignId == impressionAssignId)){
+          console.log('enter current');
+        $scope.debitId = data.val().impressionAssignId;
+        $scope.companyId = data.val().companyId;
+        $scope.tabId = data.val().tabId;
+        console.log($scope.debitId,$scope.companyId,$scope.tabId);
 
-    firebase.database().ref('impressionDebitted').on('child_added',function(snapshot){
-            //searching for particular tabId 
-        snapshot.forEach(function(data) {
-
-        if((data.val().status == "running" && data.val().impressionAssignId == impressionAssignId)||
-          (data.val().status == "pending" && data.val().impressionAssignId == impressionAssignId)) {
-          
-          $scope.debitId = data.val().impressionAssignId;
-          $scope.companyId = data.val().companyId;
-          $scope.TabId = data.val().TabId;
-
-          var newcampaignkey = firebase.database().ref('/tabCampaign/' + $scope.TabId + '/campaigns/current').push({
-            companyId : $scope.companyId,
-            debitId : $scope.debitId
-           }).key;
-         firebase.database().ref('/tabCampaign/' + $scope.TabId + '/campaigns/current/' + newcampaignkey).set({
-            companyId : $scope.companyId,
-            debitId : $scope.debitId
-          });
-         var toast = $mdToast.simple()
-          .textContent('Data Updated Successfully')
-          .highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
-          .position("bottom");
-        $mdToast.show(toast);
-         console.log("UpdatedCurrent");
+        var newcampaignkey = firebase.database().ref('/tabCampaign/' + $scope.tabId + '/campaigns/current').push({
+          companyId : $scope.companyId,
+          debitId : $scope.debitId
+         }).key;
+        
+       firebase.database().ref('/tabCampaign/' + $scope.tabId + '/campaigns/current/' + newcampaignkey).set({
+          companyId : $scope.companyId,
+          debitId : $scope.debitId
+        });
+       var toast = $mdToast.simple()
+      .textContent('Data Updated Successfully')
+      .highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
+      .position("bottom");
+       $mdToast.show(toast);
+       console.log("UpdatedCurrent");
+           $scope.dataVal={};
 
 
-        }
-        else{
-          console.log('hii');
-        }
-      });
+      }else if((data.val().status == "pending") && (data.val().impressionAssignId == impressionAssignId)){
+                  console.log('enter pending');
+        $scope.debitId = data.val().impressionAssignId;
+        $scope.companyId = data.val().companyId;
+        $scope.tabId = data.val().tabId;
+        var newcampaignkey = firebase.database().ref('/tabCampaign/' + $scope.tabId + '/campaigns/pending').push({
+          companyId : $scope.companyId,
+          debitId : $scope.debitId
+         }).key;
+
+       firebase.database().ref('/tabCampaign/' + $scope.tabId + '/campaigns/pending/' + newcampaignkey).set({
+          companyId : $scope.companyId,
+          debitId : $scope.debitId
+        });
+       var toast = $mdToast.simple()
+      .textContent('Data Updated Successfully')
+      .highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
+      .position("bottom");
+      $mdToast.show(toast);
+       console.log("UpdatedPending");
+           $scope.dataVal={};
+      }
+      else{
+        console.log('hii');
+      }
     });
+  });
+  
   };
 
 }]);
