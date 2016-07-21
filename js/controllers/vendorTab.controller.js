@@ -55,6 +55,5 @@ $scope.updateTabList = function(code,vendorId){
       .position("bottom");
     $mdToast.show(toast);
     console.log("Updated");
-    $scope.dataVal={};
   };
 }]);

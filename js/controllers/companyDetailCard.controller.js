@@ -14,8 +14,8 @@ adminApp.controller('cardsCtrl' , ['$scope', '$timeout', function($scope, $timeo
 	firebase.database().ref('city').once('value', function(snapshot){
 		angular.forEach(snapshot.val(),function(value){
 			$timeout(function(){
-			$scope.cities.push(value);
-			console.log($scope.cities);
+				$scope.cities.push(value);
+				console.log($scope.cities);
 			},100)
 		});
 	})
@@ -31,9 +31,9 @@ adminApp.controller('cardsCtrl' , ['$scope', '$timeout', function($scope, $timeo
 		$scope.sumCredit = 0;
 		firebase.database().ref('impressionCredits/'+ companyId).on('value', function(snapshot){
 			snapshot.forEach(function(data){
-				$scope.sumCredit = ($scope.sumCredit + data.val().impressionCredited);
-				console.log($scope.sumCredit);
 				$timeout(function(){
+					$scope.sumCredit = ($scope.sumCredit + data.val().impressionCredited);
+					console.log($scope.sumCredit);
 				},100);
 			});
 		});
@@ -48,9 +48,11 @@ adminApp.controller('cardsCtrl' , ['$scope', '$timeout', function($scope, $timeo
 		$scope.sumUsed = 0;
 		firebase.database().ref('impressionDebitted/'+companyId).on('value', function(snapshot){
 			snapshot.forEach(function(data){
-				$scope.sumDebit = ($scope.sumDebit + data.val().impressionAssigned);
-				$scope.sumUsed = ($scope.sumUsed + data.val().impressionUsed);
-				console.log($scope.sumDebit);
+				$timeout(function(){
+					$scope.sumDebit = ($scope.sumDebit + data.val().impressionAssigned);
+					$scope.sumUsed = ($scope.sumUsed + data.val().impressionUsed);
+					console.log($scope.sumDebit);
+				},100);
 			});
 		});
 	};
@@ -79,7 +81,9 @@ adminApp.controller('cardsCtrl' , ['$scope', '$timeout', function($scope, $timeo
 				firebase.database().ref('vendor/' + cityId + '/'+vendorId).on('value', function(snapshot){
 					date1.vendorname = snapshot.val().vendorName;
 					console.log(date1.vendorname);
-					$scope.dateobj.push(date1);
+					$timeout(function(){
+					  $scope.dateobj.push(date1);
+					},100);
 				});
 			});
 		});
@@ -108,17 +112,17 @@ adminApp.controller('cardsCtrl' , ['$scope', '$timeout', function($scope, $timeo
 						vendor1.vendorname = vendorName;
 						vendor1.used = impUsed;
 						vendor1.assigned = impAssigned;
-						$scope.vendorobj.push(vendor1);
 						$timeout(function(){
+							$scope.vendorobj.push(vendor1);
 						},100);
 					}else{
 						var f = 0;
 						for(var i=0 ; i<($scope.vendorobj.length) ; i++){
 							if($scope.vendorobj[i].vendorname == vendorName){
 								f=1;
-								$scope.vendorobj[i].used = $scope.vendorobj[i].used + impUsed;
-								$scope.vendorobj[i].assigned = $scope.vendorobj[i].assigned + impAssigned;
 								$timeout(function(){
+									$scope.vendorobj[i].used = $scope.vendorobj[i].used + impUsed;
+									$scope.vendorobj[i].assigned = $scope.vendorobj[i].assigned + impAssigned;
 								},100);
 								break;
 							};
@@ -128,8 +132,8 @@ adminApp.controller('cardsCtrl' , ['$scope', '$timeout', function($scope, $timeo
 						vendor1.vendorname = vendorName;
 						vendor1.used = impUsed;
 						vendor1.assigned = impAssigned;
-						$scope.vendorobj.push(vendor1);
 						$timeout(function(){
+							$scope.vendorobj.push(vendor1);
 						},100);
 					};
 				});

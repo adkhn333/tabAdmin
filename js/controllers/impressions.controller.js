@@ -78,23 +78,37 @@ adminApp.controller('impressionCtrl' , ['$scope', '$timeout','$mdToast',
   }
   
 
-//get all tab's Id that are assigned to a partular vendor
-$scope.getTabId = function(vendorId){
-  console.log('new');
-  console.log(vendorId);
-  $scope.allVendorsTabs = [];
-  var vendorKey = vendorId;
-  console.log(vendorKey);
-  firebase.database().ref('/vendorTab/'+ vendorKey).on('value', function(snapshot){
-    angular.forEach(snapshot.val(),function(value){
-      console.log(snapshot);
-      $scope.allVendorsTabs.push(value);
-    });
-    $timeout(function(){
-      console.log($scope.allVendorsTabs);
-    },100)
-  })
-}
+// fetch all tab ids for particular vendor
+   $scope.getTabId = function(vendorId){
+      $scope.tabNames=[];
+      console.log(vendorId);
+      $scope.allVendorsTabs = [];
+      
+      var vendorKey = vendorId;
+      firebase.database().ref('/vendorTab/'+ vendorKey).on('value', function(snapshot){
+        console.log('/vendorTab/'+ vendorKey);
+        console.log(snapshot.val());
+        angular.forEach(snapshot.val(),function(value){
+          console.log(value.tabId);
+         $scope.allVendorsTabs.push(value.tabId);
+        });
+        //console.log($scope.allVendorsTabs)
+      tabLength = $scope.allVendorsTabs.length;
+      //console.log(tabLength);
+      i = 1;
+      //give each tab a name(Tab) and no squentially and display it on frontend
+      angular.forEach($scope.allVendorsTabs, function(data) {
+          //console.log(data);
+          var tabObj = {
+            name: 'Tab '+i,
+            tabId: data
+          };
+          $scope.tabNames.push(tabObj);
+         // console.log($scope.tabNames);
+          i++;
+        });
+      })
+   };
 $scope.startDate= new Date();
 $scope.endDate= new Date();
 //assign impression details for particular company, vendor and tab 

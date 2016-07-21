@@ -3,42 +3,76 @@ adminApp.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
     .state('/', {
       url: "/",
-      templateUrl: "templates/vendorTab.html",
-      controller:'vendorTabCtrl'
+      views : {
+        "Assign Tab" : {
+          templateUrl: "templates/vendorTab.html",
+          controller:'vendorTabCtrl'
+        }
+      }
+     
     })
     .state('impressions', {
       url: "/impressions",
-      templateUrl: "templates/impressions.html",
-      controller:'impressionCtrl'
+      views : {
+        "Impression":{
+            templateUrl: "templates/impressions.html",
+            controller:'impressionCtrl'
+        }
+      }
+     
     })
     .state('register', {
       url: "/registration",
-      templateUrl: "templates/registration.html",
-      controller:'companyAppCtrl'
+      views : {
+        "Register Company" : {
+             templateUrl: "templates/registration.html",
+              controller:'companyAppCtrl'
+        }
+      }
     })
     .state('content', {
       url: "/content-provider",
-      templateUrl: "templates/contentProvider.html",
-      controller:'companyContentCtrl'
+      views : {
+        "Content Provider" : {
+            templateUrl: "templates/contentProvider.html",
+            controller:'companyContentCtrl'
+        }
+      }
     })
     .state('detail-card', {
       url: "/details-card",
-      templateUrl: "templates/company-detail-card.html",
-      controller:'cardsCtrl'
+      views : {
+        "Company Transaction Details" : {
+          templateUrl: "templates/company-detail-card.html",
+          controller:'cardsCtrl'
+        }
+      }
     })
     .state('vendor-card', {
       url: "/vendor-card",
-      templateUrl: "templates/vendor-detail-card.html",
-      controller:'vendorCardCtrl'
+      views : {
+        "Vendor Transaction Details": {
+          templateUrl: "templates/vendor-detail-card.html",
+          controller:'vendorCardCtrl'
+        }
+      }
     })
     .state('pending', {
       url: "/pending-company",
-      templateUrl: "templates/pending-company.html",
-      controller:'updatePendingAppCtrl'
+      views : {
+        "Pending Company" : {
+          templateUrl: "templates/pending-company.html",
+          controller:'updatePendingAppCtrl'
+        }
+      }
     })
     .state('get-codes', {
       url: "/get-codes",
-      templateUrl: "templates/vendor-codes.html",
-      controller:'vendorCodesCtrl'
+      views : {
+        "Get Vendor Codes" : {
+          templateUrl: "templates/vendor-codes.html",
+          controller:'vendorCodesCtrl'
+        }
+      }
     });
 });

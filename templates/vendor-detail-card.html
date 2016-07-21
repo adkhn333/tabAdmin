@@ -1,4 +1,4 @@
-<md-card class="vendorCardCard"class="vendorCardCard">
+<md-card class="vendorCardCard">
         <md-toolbar md-scroll-shrink>
           <div class="md-toolbar-tools">Vendor Transaction Details</div>
         </md-toolbar>
@@ -29,18 +29,38 @@
     <md-card class="vendorCardCard">
         <h4>Total Impression Assigned : {{tabImpressionAssigned}}</h4>
         <h4>Total Impression Used : {{tabImpressionUsed}}</h4>
+         <md-divider></md-divider>
     </md-card>
-    <md-card class="vendorCardCard">
-        <md-list-item class="md-3-line" ng-repeat="comp in company track by $index">             
-        <div  class="md-list-item-text" layout="column" >
-            <h4>{{comp.Tab}}</h4>
-            <h4>Company Names : {{comp.companyName}}</h4>
-            <h4>Total Company Impression Assigned :{{comp.impressionAssigned}} </h4>
-            <h4>Total Company Impression Used : {{comp.impressionUsed}} </h4>
-            <h4>Total Company Impression left : {{comp.impBalance}} </h4>
-            <h4>Assign Date : {{comp.assignDate}} </h4>
-            <h4>Status : {{comp.status}} </h4>
-        </div>        
-        <md-divider></md-divider>
-        </md-list-item>
+    <hr>
+      <h2 align="center">Details</h2>
+    <hr>
+    <md-card class="vendorCardCard" ng-repeat="comp in company track by $index" layout="column" >
+        <h4>
+            <center><b>{{comp.Tab}}</b></center>
+          </h4>
+          <div layout="row">
+            <p flex>Company Names</p>
+            <p flex align="right"> {{comp.companyName}}</p>
+          </div>
+          <div layout="row">
+            <p flex>Total Company Impression Assigned</p> 
+            <p flex align="right">{{comp.impressionAssigned}}</p> 
+          </div>
+          <div layout="row">
+            <p flex>Total Company Impression Used</p> 
+            <p flex align="right"> {{comp.impressionUsed}}</p> 
+          </div>
+          <div layout="row">
+            <p flex>Total Company Impression left</p> 
+            <p flex align="right"> {{comp.impBalance}} </p>
+          </div>
+          <div layout="row">
+            <p flex>Assign Date</p> 
+            <p flex align="right"> {{comp.assignDate | date : 'MMMM dd yyyy'}}</p> 
+          </div>
+          <div layout="row">
+            <p flex>Status</p> 
+            <p flex align="right"> {{comp.status}}</p> 
+          </div>
+           <md-divider></md-divider>
     </md-card>
