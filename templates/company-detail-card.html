@@ -78,7 +78,7 @@
 <hr>
 <md-card class="cardFormCard" ng-repeat="datevalue in dateobj  track by $index">
     <h4>
-        <center><b>Assign Date: {{ datevalue.date }}</b></center>
+        <center><b>Assign Date: {{ datevalue.date | date : 'MMMM dd yyyy'}}</b></center>
     </h4>
      <div layout="row">
         <p flex>Vendor Name</p>

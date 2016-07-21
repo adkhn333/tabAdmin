@@ -70,10 +70,7 @@ adminApp.controller('cardsCtrl' , ['$scope', '$timeout', function($scope, $timeo
 				assigned: ""
 				}
 
-				var presentDate = data.val().assignDate;
-				var theDate = new Date(presentDate);
-				var dateString = theDate.toGMTString()
-				date1.date = dateString;
+				date1.date = data.val().assignDate;
 				date1.used = data.val().impressionUsed;
 				date1.assigned = data.val().impressionAssigned;
 
