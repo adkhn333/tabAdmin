@@ -1,69 +1,77 @@
 <md-card class="companyRegistration">
-	<md-toolbar >
-		<div class="md-toolbar-tools">
-		  <h2 class="md-flex">Company Registration</h2>
-		</div>
-	</md-toolbar>
+	<form name="companyRegistrationForm">
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2 class="md-flex">Company Registration</h2>
+			</div>
+		</md-toolbar>
 
 		<md-input-container class="md-block">
 			<label>Company Name</label>
-			<input  required 
+			<input
+				required 
 				name="companyname" 
 				ng-model="data.companyName">
 			<div ng-messages="companyRegistrationForm.companyname.$error">
-			  <div ng-message="required">Company Name is required</div>
+				<div ng-show="companyRegistrationForm.companyname.$error.required" ng-message="required">Company Name is required</div>
 			</div>
 		</md-input-container>
 
-
-		<div layout="row" >
-			<md-autocomplete flex 
-				ng-disabled="false" 
-				md-selected-item="data.cityName"  
-				md-search-text="data.searchText"  
+		<div layout="row">
+			<!--<md-autocomplete
+				md-selected-item="addProject.builder"
+				md-items="item in getMatches(searchText) | filter : searchText"
+				ng-model="searchText" 
+				md-item-text="item.builderName"
+				placeholder="Enter name of Builder">
+					<span md-highlight-text="searchText">{{item.builderName}} </span>
+			</md-autocomplete>-->
+			<md-autocomplete
+				flex
+				ng-disabled="false"
+				md-selected-item="data.cityName"
+				md-search-text="searchText"
 				md-min-length="0"
-				md-items="item in cities | filter : searchText" 
-				ng-model="data.cityName" 
-				md-item-text="item.name" 
+				md-items="item in getMatches(searchText) | filter : searchText"
+				ng-model="data.cityId"
+				md-item-text="item.cityName"
 				placeholder="Enter name of City">
-			  	<span md-highlight-text="searchText">{{item.name}} </span>
+					<span md-highlight-text="searchText">{{item.cityName}}</span>
 			</md-autocomplete>
 		</div>
 
 		<md-input-container class="md-block">
 			<label>Enter Address</label>
-			<input  md-no-asterisk name="address" ng-model="data.address">
-			<div ng-messages="companyRegistrationForm.address.$error">
-			  <div ng-message="required">Please enter company address!</div>
-			</div>
+			<input md-no-asterisk name="address" ng-model="data.address">
 		</md-input-container>
 
 		<md-input-container class="md-block">
-            <label>Mobile Number</label>
-            <input 
-                name="contact" 
-                ng-model="data.mobileNo" 
-                ng-pattern="/^[0-9]{10}$/"
-                >
-            <div ng-messages="companyRegistrationForm.contact.$error">
-                <div ng-message="pattern">
-                    Mobile number must be exactly 10 characters long .
-                </div>
-            </div>
-        </md-input-container>
+			<label>Mobile Number</label>
+			<input 
+				name="contact" 
+				ng-model="data.mobileNo" 
+				ng-pattern="/^[0-9]{10}$/">
+				<div ng-messages="companyRegistrationForm.contact.$error">
+					<div ng-show="companyRegistrationForm.contact.$error.pattern" ng-message="pattern">
+						Mobile Number Must Contains 10 Digits Only.
+					</div>
+				</div>
+		</md-input-container>
 
-        <md-input-container class="md-block">
-			<label>Enter Email </label>
-			<input   md-no-asterisk name="email" type="email" ng-model="data.email">
+		<md-input-container class="md-block">	
+			<label>Enter Email</label>
+			<input md-no-asterisk name="email" type="email" ng-model="data.email">
 			<div ng-messages="companyRegistrationForm.email.$error">
-			  <div ng-message="required"> Must be a valid email</div>
+				<div ng-show="companyRegistrationForm.email.$error.email" ng-message="email">Please Enter Valid Email Address.</div>
 			</div>
 		</md-input-container>
 
-	    <md-button 
-	    	type="submit" 
-	    	ng-click="companyRegistration(companyName,cityName,address,mobileNo,email)"
-	    	class="md-raised md-primary">
-	    	Submit
-	    </md-button>
+		<md-button 
+			type="submit"
+			ng-disabled="!data.companyName || !companyRegistrationForm.$valid"
+			ng-click="companyRegistration(companyName,cityName,address,mobileNo,email)"
+			class="md-raised md-primary">
+			Submit
+		</md-button>
+	</form>
 </md-card>

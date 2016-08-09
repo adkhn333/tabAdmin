@@ -31,29 +31,33 @@ adminApp.controller('vendorTabCtrl' , ['$scope','$timeout','$mdToast',
     })
   }
 
-// genrate a random 16 digit code for tabActivation
-$scope.genrateCode = function(){
-  console.log('hii');
-   $scope.code = (Math.random()+' ').substring(2,10)+(Math.random()+' ').substring(2,10);
-   console.log($scope.code);
- };
+  // generate a random 16 digit code for tabActivation
+  $scope.generateCode = function(){
+    console.log('hii');
+    $scope.dataVal.code = (Math.random()+' ').substring(2,10)+(Math.random()+' ').substring(2,10);
+    console.log($scope.dataVal.code);
+  };
 
-// assign a vendor an unique tab and an unique code for its activation 
-$scope.updateTabList = function(code,vendorId){
+  // assign a vendor an unique tab and an unique code for its activation 
+  $scope.updateTabList = function(data){
     var newTabKey = firebase.database().ref('/vendorTab/vendorId').push().key;
     var vendorTabData = {
       tabId : newTabKey,
-      vendorId : $scope.vendorId,
-      code : code,
+      vendorId : data.vendorId,
+      code : data.code,
     };
     var updates = {};
-    updates['/vendorTab/' + vendorId +'/' +newTabKey] = vendorTabData;
+    updates['/vendorTab/' + data.vendorId +'/' + newTabKey] = vendorTabData;
     firebase.database().ref().update(updates);
-    var toast = $mdToast.simple()
-      .textContent('Data Updated Successfully')
-      .highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
-      .position("bottom");
+    var toast = $mdToast
+                  .simple()
+                  .textContent('Data Updated Successfully')
+                  .highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
+                  .position("bottom");
     $mdToast.show(toast);
     console.log("Updated");
+    $scope.dataVal = {};
+    $scope.assignVendorTabForm.$setPristine();
+    $scope.assignVendorTabForm.$setUntouched();
   };
 }]);

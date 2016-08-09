@@ -35,10 +35,9 @@ adminApp.controller('impressionCtrl' , ['$scope', '$timeout','$mdToast',
     $scope.dataVal={};
   };
 
+  //impressions debited js
 
-    //impressions debited js
-
-   //return all city name and city id 
+  //return all city name and city id 
   $scope.cities = [];
   firebase.database().ref('city').once('value', function(snapshot){
     angular.forEach(snapshot.val(),function(value){
@@ -47,7 +46,7 @@ adminApp.controller('impressionCtrl' , ['$scope', '$timeout','$mdToast',
         console.log($scope.cities);
       },100)
     });
-  })
+  });
  //retrieve every company's data 
   $scope.allCompanies = [];
     firebase.database().ref('/marketing/company/registration/').on('value', function(snapshot){
@@ -57,61 +56,61 @@ adminApp.controller('impressionCtrl' , ['$scope', '$timeout','$mdToast',
     $timeout(function(){
       console.log($scope.allCompanies);
     },0)
-  })
+  });
     //use cityId for getting vendors list
   $scope.allVendors = [];
   $scope.setCityId = function(cityId){
-   // $scope.cityId = cityId;
+    $scope.allVendors = [];
+    // $scope.cityId = cityId;
     console.log(cityId);
     // retrieve every vendor's name and id
-    firebase.database().ref('vendor/'+cityId).once('value', function(snapshot){
-    console.log(snapshot.val());
-    angular.forEach(snapshot.val(),function(value){
-       var vendorObj = {
-        vendorId : value.vendorId,
-        vendorName : value.vendorName,
-      }
-      $scope.allVendors.push(vendorObj);
-      console.log($scope.allVendors);
-    })  
-  })
+    firebase.database().ref('vendor/'+cityId).once('value', function(snapshot) {
+      console.log(snapshot.val());
+      angular.forEach(snapshot.val(),function(value){
+        var vendorObj = {
+          vendorId : value.vendorId,
+          vendorName : value.vendorName,
+        }
+        $scope.allVendors.push(vendorObj);
+        console.log($scope.allVendors);
+      });
+    });
   }
-  
 
-// fetch all tab ids for particular vendor
-   $scope.getTabId = function(vendorId){
-      $scope.tabNames=[];
-      console.log(vendorId);
-      $scope.allVendorsTabs = [];
-      
-      var vendorKey = vendorId;
-      firebase.database().ref('/vendorTab/'+ vendorKey).on('value', function(snapshot){
-        console.log('/vendorTab/'+ vendorKey);
-        console.log(snapshot.val());
-        angular.forEach(snapshot.val(),function(value){
-          console.log(value.tabId);
-         $scope.allVendorsTabs.push(value.tabId);
-        });
-        //console.log($scope.allVendorsTabs)
-      tabLength = $scope.allVendorsTabs.length;
-      //console.log(tabLength);
-      i = 1;
-      //give each tab a name(Tab) and no squentially and display it on frontend
-      angular.forEach($scope.allVendorsTabs, function(data) {
-          //console.log(data);
-          var tabObj = {
-            name: 'Tab '+i,
-            tabId: data
-          };
-          $scope.tabNames.push(tabObj);
-         // console.log($scope.tabNames);
-          i++;
-        });
-      })
-   };
-$scope.startDate= new Date();
-$scope.endDate= new Date();
-//assign impression details for particular company, vendor and tab 
+  // fetch all tab ids for particular vendor
+  $scope.getTabId = function(vendorId){
+    $scope.tabNames=[];
+    console.log(vendorId);
+    $scope.allVendorsTabs = [];
+    
+    var vendorKey = vendorId;
+    firebase.database().ref('/vendorTab/'+ vendorKey).on('value', function(snapshot){
+      console.log('/vendorTab/'+ vendorKey);
+      console.log(snapshot.val());
+      angular.forEach(snapshot.val(),function(value){
+        console.log(value.tabId);
+        $scope.allVendorsTabs.push(value.tabId);
+      });
+      //console.log($scope.allVendorsTabs)
+    tabLength = $scope.allVendorsTabs.length;
+    //console.log(tabLength);
+    i = 1;
+    //give each tab a name(Tab) and no squentially and display it on frontend
+    angular.forEach($scope.allVendorsTabs, function(data) {
+        //console.log(data);
+        var tabObj = {
+          name: 'Tab '+i,
+          tabId: data
+        };
+        $scope.tabNames.push(tabObj);
+        // console.log($scope.tabNames);
+        i++;
+      });
+    })
+  };
+  $scope.startDate= new Date();
+  $scope.endDate= new Date();
+  //assign impression details for particular company, vendor and tab 
 $scope.impressionAssign = function(vendorId,tabId,companyId,impressionAssigned,startDate,endDate){
   firebase.database().ref('/impressionCredits/' + companyId).orderByChild("companyId").equalTo(companyId).on('child_added',function(snapshot){
   var creditId = snapshot.val().impressionCreditId;

@@ -12,19 +12,22 @@ adminApp.directive('fileModel', ['$parse', function ($parse) {
     }
   };
 }]);
+
 adminApp.controller('companyContentCtrl' , ['$scope','$timeout','$http','$mdToast',
  function($scope, $timeout,$http,$mdToast){
   $scope.isLoading = false;
   $scope.allCompany = [];
+  // return all company
   firebase.database().ref('marketing/company/registration').on('value', function(snapshot){
     $timeout(function(){
        $scope.allCompany= snapshot.val();
        console.log($scope.allCompany);  
     },50);
   });
-
+  // CKEditor initialization
   CKEDITOR.replace( 'editor' );
- //this function retrieve file details
+
+  //this function retrieve file details
   $scope.getFileDetails = function (e) {
     $scope.files = [];
     $scope.$apply(function () {
@@ -71,7 +74,7 @@ adminApp.controller('companyContentCtrl' , ['$scope','$timeout','$http','$mdToas
       });
     }
   }
-// this function update companyId, title, description and imgaeUrl as recieved from CDN in firebase database 
+  // this function update companyId, title, description and imgaeUrl as recieved from CDN in firebase database 
   $scope.uploadLinks = function(companyId,title){
     var description = CKEDITOR.instances.editor.getData();
     //console.log(companyId, title, description);

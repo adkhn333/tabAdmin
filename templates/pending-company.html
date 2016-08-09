@@ -1,7 +1,7 @@
 <md-card class="companyImpDebForm">
 	<md-toolbar >
 		<div class="md-toolbar-tools">
-			<h2 class="md-flex">Update pending campaign to current current campaign</h2>
+			<h2 class="md-flex">Update Pending Campaign To Running Campaign</h2>
 		</div>
 	</md-toolbar>
 		<md-select placeholder="Select City" 
@@ -11,7 +11,6 @@
 	      		{{city.cityName}}
 	      	</md-option>
 	    </md-select>
-	    
 		<md-select placeholder="Select Vendor" 
             ng-model="dataVal.vendorId" 
             ng-change="getTabId(dataVal.vendorId)">
@@ -31,6 +30,7 @@
 		<div align="center" class="impDebtSubmitButton">
 			<md-button class="md-raised md-primary fullWidthButton"
 				type="submit"
+				ng-disabled="!dataVal.tabId || !dataVal.cityId || !dataVal.vendorId"
 				ng-click="enterPending(dataVal.tabId)">
 				Update Pending To Running
 			</md-button>

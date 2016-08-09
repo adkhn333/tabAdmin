@@ -1,5 +1,7 @@
 adminApp.controller('cardsCtrl' , ['$scope', '$timeout', function($scope, $timeout){
 	$scope.allCompany = [];
+
+	// return all company 
 	firebase.database().ref('marketing/company/registration').on('value', function(snapshot){
 		angular.forEach(snapshot.val(), function(value){
 			$scope.allCompany= snapshot.val();
@@ -18,7 +20,16 @@ adminApp.controller('cardsCtrl' , ['$scope', '$timeout', function($scope, $timeo
 				console.log($scope.cities);
 			},100)
 		});
-	})
+	});
+
+	// Clear Form
+	$scope.clearForm = function() {
+		$scope.sumCredit = null;
+		$scope.sumDebit = null;
+		$scope.sumUsed = null;
+		$scope.vendorobj = null;
+		$scope.dateobj = null;
+	}
 
 
 	$scope.isDisabledCredit = false;
@@ -87,7 +98,7 @@ adminApp.controller('cardsCtrl' , ['$scope', '$timeout', function($scope, $timeo
 	};
 
 	// params : companyId(str),cityId(str) 
-	$scope.VendorInfo = function(companyId,cityId){
+	$scope.VendorInfo = function(companyId,cityId) {
 		$scope.vendorobj = [];
 		firebase.database().ref('impressionDebitted/'+companyId).on('value', function(snapshot){
 			snapshot.forEach(function(data){

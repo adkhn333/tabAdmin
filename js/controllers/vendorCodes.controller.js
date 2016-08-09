@@ -1,15 +1,16 @@
 adminApp.controller('vendorCodesCtrl', ['$scope','$timeout', function($scope,$timeout){
 	//return all city name and city id 
-    $scope.cities = [];
-    firebase.database().ref('city').once('value', function(snapshot){
-      angular.forEach(snapshot.val(),function(value){
-        $timeout(function(){
-          $scope.cities.push(value);
-          console.log($scope.cities);
-        },100)
-      });
-    })
-
+	$scope.cities = [];
+	firebase.database().ref('city').once('value', function(snapshot){
+		angular.forEach(snapshot.val(),function(value){
+			$timeout(function(){
+				$scope.cities.push(value);
+				console.log($scope.cities);
+			},100)
+		});
+	});
+	
+	// fetch vendor name and its code of particular city
 	$scope.getVendorDetails = function(cityId){
 		$scope.allVendors=[];
 		vendorSnap=[];

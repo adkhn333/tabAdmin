@@ -2,7 +2,7 @@
   <div class="header">
     <h1 style="font-size:250%">Assign Vendor Tab</h1>
   </div>
-  <form class="">
+  <form name="assignVendorTabForm">
     <md-select 
       placeholder="Select City" 
       ng-model="dataVal.cityId" >
@@ -16,7 +16,7 @@
     <md-select 
       placeholder="Select Vendor" 
       ng-model="dataVal.vendorId" 
-      ng-change="genrateCode()">
+      ng-change="generateCode()">
         <md-option 
           ng-value="vendor.vendorId" 
           ng-repeat="vendor in allVendors track by $index">
@@ -25,15 +25,21 @@
     </md-select>
     <md-input-container class="md-block">
       <label>ENTER CODE</label>
-      <input type="text" required 
+      <input 
+        type="text" 
+        required 
         md-no-asterisk 
         ng-model="dataVal.code"
         name="enterCode">
+        <div ng-messages="assignVendorTabForm.enterCode.$error">
+          <div ng-show="assignVendorTabForm.enterCode.$error.required" ng-message="required">Code Is Required</div>
+        </div>
     </md-input-container>
     <md-button 
-      ng-click="updateTabList(dataVal.code,dataVal.vendorId)" 
+      ng-click="updateTabList(dataVal)" 
       type="submit"
-      class="md-raised md-primary" >
+      class="md-raised md-primary"
+      ng-disabled="!dataVal || !dataVal.code">
       Activate
     </button> 
   </form>

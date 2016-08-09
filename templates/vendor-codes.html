@@ -8,7 +8,8 @@
   </select>
   <md-button  
     class="md-raised md-primary fullWidthButton" 
-    ng-click="getVendorDetails(cityId)">
+    ng-click="getVendorDetails(cityId)"
+    ng-disabled="!cityId">
     Get Details
   </md-button>
 </md-card>

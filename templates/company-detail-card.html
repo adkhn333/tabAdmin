@@ -5,13 +5,13 @@
     <md-card flex class="insideCard">
         <h1 class="md-title" layout-align="center">Select City</h1>
         <select class="formSelector"  ng-model="dataVal.cityId">
-            <option  ng-repeat="city in cities track by $index" ng-value="city.cityId">
+            <option ng-repeat="city in cities track by $index" ng-value="city.cityId">
               {{city.cityName}}
             </option>
         </select>
         <h1 class="md-title" layout-align="center">Select Company</h1>
-        <select class="formSelector" ng-model="dataVal.companyId" ng-disabled="!dataVal.cityId ">
-            <option  ng-repeat="company in allCompany" value="{{company.companyId}}">
+        <select ng-change="clearForm()" class="formSelector" ng-model="dataVal.companyId" ng-disabled="!dataVal.cityId ">
+            <option ng-repeat="company in allCompany" value="{{company.companyId}}">
                 {{company.companyName}}
             </option>
         </select>

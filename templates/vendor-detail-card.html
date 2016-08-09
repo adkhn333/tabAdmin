@@ -18,12 +18,12 @@
                 {{vendor.vendorName}}
               </md-option>
           </md-select>
-            <md-select ng-model="tabId">
+            <md-select ng-model="tabId" placeholder="Select Tab">
               <md-option  ng-repeat="tab in tabNames" value="{{tab.tabId}}">{{tab.name}}</md-option>
             </md-select>
           </md-input-container>
-           <md-button ng-click="showImpressionDetails(vendorId,tabId)">Get Details</md-button>
-           <md-button ng-click="showAllDetails(vendorId)">Get All Details</md-button>
+           <md-button class="md-primary md-raised" ng-disabled="!cityId || !vendorId || !tabId" ng-click="showImpressionDetails(vendorId,tabId)">Get Details</md-button>
+           <md-button class="md-primary md-raised" ng-disabled="!cityId || !vendorId" ng-click="showAllDetails(vendorId)">Get All Details</md-button>
         </form>
     </md-card>
     <md-card class="vendorCardCard">
